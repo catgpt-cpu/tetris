@@ -1,5 +1,5 @@
 [app]
-title = Tetris Game
+title = Tetris
 package.name = tetrisgame
 source.dir =.
 source.include_exts = py,png,jpg,kv,atlas
