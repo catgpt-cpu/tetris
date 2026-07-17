@@ -1,42 +1,30 @@
 name: Build Tetris APK
-on:
-  workflow_dispatch:
+on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-22.04
+    env:
+      ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
+      ANDROID_NDK_ROOT: ${{ github.workspace }}/android-sdk/ndk/25.2.9519653
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+        with: {distribution: 'temurin', java-version: '17'}
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.9'
-      - name: Install Deps
+        with: {python-version: '3.9'}
+      - run: sudo apt update && sudo apt install -y git zip unzip openjdk-17-jdk python3-pip wget
+      - run: pip install buildozer cython==0.29.33
+      - name: Setup SDK
         run: |
-          sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip wget
-          pip install buildozer cython==0.29.33
-      - name: Setup Android
-        run: |
-          mkdir -p $HOME/android-sdk/cmdline-tools
-          cd $HOME/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+          cd $ANDROID_SDK_ROOT
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
           unzip -q commandlinetools-linux-11076708_latest.zip -d cmdline-tools
           mv cmdline-tools/cmdline-tools cmdline-tools/latest
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
-          mkdir -p licenses
-          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > licenses/android-sdk-license
-          echo "d56a5727a5f2e8fe7f7c7ac0a5e3f1b7a9a5e3f1" >> licenses/android-sdk-license
-          sdkmanager --install "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
-      - name: Build
-        run: |
-          export ANDROID_SDK_ROOT=$HOME/android-sdk
-          export ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/25.2.9519653
-          buildozer -v android debug
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
+      - name: Build APK
+        run: buildozer -v android debug
       - uses: actions/upload-artifact@v4
-        with:
-          name: Tetris-APK
-          path: bin/*.apk
+        with: {name: Tetris-APK, path: bin/*.apk}
