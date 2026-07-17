@@ -30,6 +30,9 @@ jobs:
 
       - name: Accept Android Licenses
         run: |
+          mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
+          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $HOME/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
+          echo "d56a5727a5f2e8fe7f7c7ac0a5e3f1b7a9a5e3f1" >> $HOME/.buildozer/android/platform/android-sdk/licenses/android-sdk-license
           yes | sdkmanager --licenses || true
 
       - name: Build APK Pygame
