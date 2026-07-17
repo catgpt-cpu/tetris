@@ -12,4 +12,4 @@ fullscreen = 1
 android.api = 31
 android.minapi = 21
 android.arch = arm64-v8a, armeabi-v7a
-android.logcat_filters = *:S python:D
+p4a.branch = develop
