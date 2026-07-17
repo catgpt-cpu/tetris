@@ -14,23 +14,21 @@ jobs:
       with:
         python-version: '3.9'
         
-    - name: Install System Deps
+    - name: Install Deps
       run: |
         sudo apt update
         sudo apt install -y zip unzip openjdk-17-jdk
-        pip install --upgrade pip
         pip install buildozer cython
         
-    - name: Force NDK 25b
+    - name: Force Delete Old NDK
+      run: rm -rf ~/.buildozer
+        
+    - name: Build With NDK 25b
       run: |
-        rm -rf ~/.buildozer
-        mkdir -p ~/.buildozer/android/platform
-        
-    - name: Accept Licenses
-      run: yes | buildozer android debug || true
-        
-    - name: Build APK
-      run: buildozer android debug
+        buildozer android debug \
+        android.ndk=25b \
+        android.api=33 \
+        android.accept_sdk_license=True
       
     - name: Upload APK
       uses: actions/upload-artifact@v4
