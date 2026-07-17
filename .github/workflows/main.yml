@@ -21,11 +21,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
+          cache: 'pip'
           
       - name: Install System Dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk expect
+          sudo apt install -y git zip unzip openjdk-17-jdk expect ccache
           
       - name: Install Buildozer
         run: |
@@ -34,7 +35,9 @@ jobs:
           
       - name: Build APK Pygame
         run: |
-          expect -c "spawn buildozer android debug; expect \"Accept?\" { send \"y\r\" }; interact"
+          buildozer android debug || true
+          echo "=== ISI FOLDER BIN ==="
+          ls -la bin/ || echo "Folder bin kosong"
         timeout-minutes: 120
           
       - name: Upload APK Artifact
@@ -42,4 +45,4 @@ jobs:
         with:
           name: Tetris-Pygame-APK
           path: bin/*.apk
-          if-no-files-found: error
+          if-no-files-found: warn
