@@ -1,37 +1,22 @@
 name: Build APK
 
-on:
-  workflow_dispatch:
+on: [workflow_dispatch]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Python 3.9
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.9'
-        
-    - name: Install Deps
-      run: |
-        sudo apt update
-        sudo apt install -y zip unzip openjdk-17-jdk
-        pip install buildozer cython
-        
-    - name: Force Delete Old NDK
-      run: rm -rf ~/.buildozer
-        
-    - name: Build With NDK 25b
-      run: |
-        buildozer android debug \
-        android.ndk=25b \
-        android.api=33 \
-        android.accept_sdk_license=True
+      - uses: actions/checkout@v4
       
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: tetris-apk
-        path: bin/*.apk
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
+          
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
