@@ -13,9 +13,8 @@ android.minapi = 21
 android.ndk = 25b
 android.arch = arm64-v8a
 android.permissions = INTERNET
-p4a.branch = develop
-log_level = 2
 
-[buildozer]
+android.build_tools_version = 31.0.0
+android.gradle_dependencies =
+p4a.branch = master
 log_level = 2
-warn_on_root = 1
