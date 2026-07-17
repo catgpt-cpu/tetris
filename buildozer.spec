@@ -5,9 +5,11 @@ source.dir =.
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0.0
 requirements = python3,pygame==2.5.2,sdl2
+orientation = landscape
+fullscreen = 1
+
 [buildozer]
-android.api = 33
+android.api = 31
 android.minapi = 21
-android.ndk = 25b
-android.accept_sdk_license = True
-android.arch = armeabi-v7a, arm64-v8a
+android.arch = arm64-v8a, armeabi-v7a
+android.logcat_filters = *:S python:D
