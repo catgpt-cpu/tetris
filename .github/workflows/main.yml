@@ -9,21 +9,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Hapus Cache Buildozer
-      run: rm -rf ~/.buildozer
-    
-    - name: Setup Python
+    - name: Setup Python 3.9
       uses: actions/setup-python@v5
       with:
         python-version: '3.9'
         
-    - name: Install Dependencies
+    - name: Install System Deps
       run: |
-        pip install buildozer cython
         sudo apt update
         sudo apt install -y zip unzip openjdk-17-jdk
+        pip install --upgrade pip
+        pip install buildozer cython
         
-    - name: Accept Android Licenses
+    - name: Force NDK 25b
+      run: |
+        rm -rf ~/.buildozer
+        mkdir -p ~/.buildozer/android/platform
+        
+    - name: Accept Licenses
       run: yes | buildozer android debug || true
         
     - name: Build APK
