@@ -18,19 +18,17 @@ jobs:
         with:
           python-version: '3.9'
           
-      - name: Install Buildozer
+      - name: Install Buildozer + expect
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk
+          sudo apt install -y git zip unzip openjdk-17-jdk expect
           pip install --upgrade pip
           pip install buildozer cython
           
       - name: Build APK
         run: |
-          # Build pertama: biar download SDK + gagal karena license
-          buildozer android debug || true
-          # Build kedua: sekarang license udah di accept otomatis sama buildozer
-          buildozer android debug
+          # Ini akan otomatis jawab "y" ke semua pertanyaan license
+          expect -c "spawn buildozer android debug; expect \"Accept?\" { send \"y\r\" }; interact"
           
       - uses: actions/upload-artifact@v4
         with:
