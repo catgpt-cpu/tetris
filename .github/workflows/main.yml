@@ -23,7 +23,7 @@ jobs:
         sudo apt update
         sudo apt install -y zip unzip openjdk-17-jdk
         
-    - name: Accept Android Licenses  # TAMBAH INI
+    - name: Accept Android Licenses
       run: yes | buildozer android debug || true
         
     - name: Build APK
