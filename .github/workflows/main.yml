@@ -4,25 +4,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
+      - uses: ArtemSBulgakov/buildozer-action@v1
         with:
           command: buildozer android debug
           buildozer_version: stable
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: tetris-apk
           path: bin/*.apk
