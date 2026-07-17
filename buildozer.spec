@@ -1,15 +1,19 @@
 [app]
-title = Tetris
+title = Tetris Game
 package.name = tetrisgame
+package.domain = org.test
 source.dir =.
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0.0
 requirements = python3,pygame==2.5.2,sdl2
 orientation = landscape
 fullscreen = 1
+android.arch = arm64-v8a, armeabi-v7a
 
 [buildozer]
+log_level = 2
+
 android.api = 31
 android.minapi = 21
-android.arch = arm64-v8a, armeabi-v7a
 p4a.branch = develop
+p4a.recipes = sdl2,pygame
