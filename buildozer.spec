@@ -4,8 +4,7 @@ package.name = tetrisgame
 source.dir =.
 source.include_exts = py,png,jpg,kv,atlas
 version = 1.0.0
-requirements = python3,kivy,pygame==2.5.2
-
+requirements = python3,pygame==2.5.2,sdl2
 [buildozer]
 android.api = 33
 android.minapi = 21
