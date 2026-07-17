@@ -31,12 +31,14 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install buildozer cython
+          buildozer --version
           
       - name: Build APK Pygame
         run: |
-          buildozer android debug || true
+          buildozer init || true
+          buildozer android debug
           echo "=== ISI FOLDER BIN ==="
-          ls -la bin/ || echo "Folder bin kosong"
+          ls -la bin/
         timeout-minutes: 120
           
       - name: Upload APK Artifact
@@ -44,4 +46,4 @@ jobs:
         with:
           name: Tetris-Pygame-APK
           path: bin/*.apk
-          if-no-files-found: warn
+          if-no-files-found: error
