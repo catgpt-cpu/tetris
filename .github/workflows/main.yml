@@ -34,26 +34,16 @@ jobs:
           unzip -q cmdtools.zip -d cmdline-tools
           mv cmdline-tools/cmdline-tools cmdline-tools/latest
 
-          mkdir -p $HOME/android-sdk/tools/bin
-          ln -s $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager $HOME/android-sdk/tools/bin/sdkmanager
-
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
 
           mkdir -p $ANDROID_SDK_ROOT/licenses
-          echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $ANDROID_SDK_ROOT/licenses/android-sdk-license
-
           yes | sdkmanager --licenses
+
           sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
 
       - name: Build APK with Buildozer
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/25.2.9519653
-          buildozer -v android debug > build.log 2>&1 || (cat build.log && exit 1)
-
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Tetris-APK
-          path: bin/*.apk
+          buildozer -v android debug
