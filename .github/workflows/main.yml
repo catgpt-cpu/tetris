@@ -38,12 +38,13 @@ jobs:
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
 
           mkdir -p $ANDROID_SDK_ROOT/licenses
-          yes | sdkmanager --licenses
+          for lic in 24333f8a63b6825ea9c5514f83c2829b004d1fee 33b6a2b27006a5d30a899e1b9d7a2f3e2b8c7a1d; do echo $lic > $ANDROID_SDK_ROOT/licenses/android-sdk-license; done
 
+          yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
 
       - name: Build APK with Buildozer
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/25.2.9519653
-          buildozer -v android debug
+          buildozer android debug --sdk $ANDROID_SDK_ROOT
