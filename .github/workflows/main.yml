@@ -34,6 +34,10 @@ jobs:
           unzip -q cmdtools.zip -d cmdline-tools
           mv cmdline-tools/cmdline-tools cmdline-tools/latest
           
+          # INI KUNCINYA: BIKIN FOLDER PALSU BIAR BUILDOZER DIEM
+          mkdir -p $HOME/android-sdk/tools/bin
+          ln -s $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager $HOME/android-sdk/tools/bin/sdkmanager
+          
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
           
@@ -47,7 +51,6 @@ jobs:
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           export ANDROID_NDK_ROOT=$HOME/android-sdk/ndk/25.2.9519653
-          export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
           buildozer -v android debug
 
       - name: Upload APK Artifact
